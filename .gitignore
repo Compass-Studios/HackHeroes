@@ -484,3 +484,5 @@ $RECYCLE.BIN/
 *.swp
 
 HackHeroesAPI/HackHeroes.API/root.txt
+
+HackHeroesPython/venv/*
