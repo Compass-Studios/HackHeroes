@@ -1,11 +1,12 @@
 using HackHeroes.API.Models;
-using Microsoft.Extensions.Primitives;
+using HackHeroes.API.Services.TranslationService;
 
 namespace HackHeroes.API;
 
 abstract class HackHeroesAPI
 {
 	public static WebApplication App { get; private set; }
+	private static ITranslationService _translationService;
 	public static void Main(string[] args)
 	{
 		string rootApiToken = CreateRootApiToken();
@@ -13,8 +14,9 @@ abstract class HackHeroesAPI
 
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
-
+		
 		App = builder.Build();
+		_translationService = new DevTranslationService();
 
 		if (App.Environment.IsDevelopment())
 		{
@@ -29,13 +31,21 @@ abstract class HackHeroesAPI
 			.WithDescription("Returns server status")
 			.WithOpenApi();
 
-		App.MapPost("/translate", (HttpContext ctx, TranslationRequest? translationRequest) =>
+		App.MapPost("/translate", async (HttpContext ctx, TranslationRequest? translationRequest) =>
 			{
 				string? token = ctx.Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
 				if (token is not { } token2 || !token2.Equals(rootApiToken))
 					return Results.Unauthorized();
+				
+				if (translationRequest is null)
+					return Results.BadRequest();
 
-				return translationRequest is null ? Results.BadRequest() : Results.Ok(new TranslationResponse("translated message"));
+				string? translatedMessage = await _translationService.Translate(translationRequest.Message, translationRequest.Direction);
+
+				if (translatedMessage is null)
+					return Results.StatusCode(500);
+				
+				return Results.Ok(new TranslationResponse(translatedMessage));
 			})
 			.WithName("PostTranslate")
 			.WithDescription("Translates given message from/to Gen Z slang. Requires Bearer authentication token to be set")
