@@ -57,7 +57,7 @@ abstract class HackHeroesAPI
 		if (File.Exists(path))
 			return File.ReadAllText(path);
 
-		string token = Guid.NewGuid().ToString();
+		string token = TokenGenerator.Generate();
 		File.WriteAllText(path, token);
 		return token;
 	}
