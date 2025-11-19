@@ -63,7 +63,11 @@ fun TranslationScreen(
             output?.let {
                 OutputCard(
                     isLoading = it is LoadingState.Loading,
-                    text = if (it is LoadingState.Success) it.data else "",
+                    text = when (it) {
+                        is LoadingState.Success -> it.data
+                        is LoadingState.Error<*> -> it.error.message!!
+                        else -> ""
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
