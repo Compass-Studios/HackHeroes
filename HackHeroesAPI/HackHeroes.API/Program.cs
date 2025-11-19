@@ -35,14 +35,7 @@ abstract class HackHeroesAPI
 				if (token is not { } token2 || !token2.Equals(rootApiToken))
 					return Results.Unauthorized();
 
-				if (translationRequest is null)
-					return Results.BadRequest();
-
-				return Results.Ok(new
-				{
-					translationRequest.Message,
-					translationRequest.Direction,
-				});
+				return translationRequest is null ? Results.BadRequest() : Results.Ok(new TranslationResponse("translated message"));
 			})
 			.WithName("PostTranslate")
 			.WithDescription("Translates given message from/to Gen Z slang. Requires Bearer authentication token to be set")
