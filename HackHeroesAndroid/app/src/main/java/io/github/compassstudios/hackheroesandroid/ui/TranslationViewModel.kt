@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TranslationViewModel(application: Application) : AndroidViewModel(application) {
+    var direction by mutableStateOf(TranslationDto.Direction.ToBrainrot)
+
     var input by mutableStateOf("")
 
     private val _output = MutableStateFlow<LoadingState<String>?>(null)
@@ -36,7 +38,7 @@ class TranslationViewModel(application: Application) : AndroidViewModel(applicat
             val res = ApiClient.translationApi.translate(
                 request = TranslationDto.Request(
                     message = input,
-                    direction = TranslationDto.Direction.FromBrainrot,
+                    direction = direction,
                 ),
                 basePath = credentials!!.apiUrl,
                 authorization = "Bearer ${credentials.apiKey}",

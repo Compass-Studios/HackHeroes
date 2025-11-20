@@ -11,4 +11,7 @@
     <string name="settings_api_key">Klucz API</string>
     <string name="settings_error_invalid_url">Nieprawidłowy URL</string>
     <string name="settings_error_invalid_key">Nieprawidłowy Klucz</string>
+    <string name="language_normal">Normalny</string>
+    <string name="language_brainrot">Brainrot</string>
+    <string name="translator_switch_direction_button">Zamień kierunek</string>
 </resources>
