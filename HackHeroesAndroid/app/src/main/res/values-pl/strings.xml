@@ -10,4 +10,5 @@
     <string name="settings_api_url">URL API</string>
     <string name="settings_api_key">Klucz API</string>
     <string name="settings_error_invalid_url">Nieprawidłowy URL</string>
+    <string name="settings_error_invalid_key">Nieprawidłowy Klucz</string>
 </resources>

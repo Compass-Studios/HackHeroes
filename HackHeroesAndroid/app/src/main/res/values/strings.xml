@@ -9,4 +9,5 @@
     <string name="settings_api_url">API URL</string>
     <string name="settings_api_key">API Key</string>
     <string name="settings_error_invalid_url">Invalid URL</string>
+    <string name="settings_error_invalid_key">Invalid Key</string>
 </resources>

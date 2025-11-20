@@ -41,10 +41,13 @@ fun TranslationScreen(
     viewModel: TranslationViewModel = viewModel()
 ) {
     val output by viewModel.output.collectAsState()
+    val canSettingsBeDismissed by viewModel.canSettingsBeDismissed.collectAsState(true)
 
-    if (viewModel.areSettingsVisible) {
+    if (viewModel.areSettingsVisible || !canSettingsBeDismissed) {
         SettingsDialog(
-            onDismissRequest = { viewModel.areSettingsVisible = false },
+            onDismissRequest = {
+                viewModel.areSettingsVisible = false
+            },
         )
     }
 

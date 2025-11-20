@@ -10,6 +10,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -29,6 +30,10 @@ fun SettingsDialog(
 ) {
     val serverStatus by viewModel.serverStatus.collectAsState()
     if (serverStatus is LoadingState.Success) onDismissRequest()
+
+    LaunchedEffect(null) {
+        viewModel.restoreState()
+    }
 
     AlertDialog(
         title = {
@@ -82,13 +87,27 @@ fun SettingsDialog(
                 OutlinedTextField(
                     value = viewModel.apiKey,
                     onValueChange = { viewModel.apiKey = it },
+                    supportingText = {
+                        serverStatus?.let {
+                            if (it is LoadingState.Error<*> && it.error is SettingsViewModel.InvalidKeyError) {
+                                Text(
+                                    text = stringResource(R.string.settings_error_invalid_key),
+                                    color = MaterialTheme.colorScheme.error,
+                                )
+                            }
+                        }
+                    },
                     label = {
                         Text(stringResource(R.string.settings_api_key))
                     }
                 )
 
                 serverStatus?.let {
-                    if (it is LoadingState.Error<*> && it.error !is SettingsViewModel.InvalidUrlError) {
+                    if (
+                        it is LoadingState.Error<*>
+                        && it.error !is SettingsViewModel.InvalidUrlError
+                        && it.error !is SettingsViewModel.InvalidKeyError
+                    ) {
                         Text(
                             text = it.error.localizedMessage ?: it.error.toString(),
                             color = MaterialTheme.colorScheme.error,

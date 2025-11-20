@@ -5,19 +5,21 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Header
 import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
-import de.jensklingenberg.ktorfit.http.Url
+import de.jensklingenberg.ktorfit.http.Path
 import io.github.compassstudios.hackheroesandroid.api.models.StatusDto
 import io.github.compassstudios.hackheroesandroid.api.models.TranslationDto
 
 interface TranslationApi {
-    @GET
+    @GET("{basePath}/status")
     suspend fun status(
-        @Url url: String,
+        @Path basePath: String,
+        @Header("Authorization") authorization: String,
     ): StatusDto
 
-    @POST("translate")
+    @POST("{basePath}/translate")
     @Headers("Content-Type: application/json")
     suspend fun translate(
+        @Path basePath: String,
         @Body request: TranslationDto.Request,
         @Header("Authorization") authorization: String,
     ): TranslationDto.Response
