@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tłumacz Brainrotu</string>
+    <string name="translator_input_placeholder">Wpisz tekst</string>
+    <string name="translator_clear_button">Wyczyść</string>
+    <string name="translator_translate_button">Przetłumacz</string>
+</resources>
