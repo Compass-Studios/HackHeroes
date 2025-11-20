@@ -68,8 +68,6 @@ def translate(text: List[str] = typer.Argument(..., help="Text for translation")
             Tekst: "On zachowuje się dziwnie." -> Slang: "Ale odklejka, typ ma swój świat."
             Tekst: "Wyglądasz świetnie." -> Slang: "Slay, wyglądasz jak sigma."
         """
-        title = "Formalny -> Slang (Gen Z)"
-        style = "bold magenta"
     else:
         system_prompt = """Jesteś ekspertem językowym i tłumaczem międzypokoleniowym. 
             Twoim zadaniem jest przetłumaczenie młodzieżowego slangu na poprawną, kulturalną polszczyznę, zrozumiałą dla osoby starszej (seniora).
@@ -85,17 +83,11 @@ def translate(text: List[str] = typer.Argument(..., help="Text for translation")
             Slang: "Idę na trening, muszę grindować żeby być sigmą."
             Tłumaczenie: "Idę na trening, muszę ciężko pracować, żeby stać się niezależnym i silnym człowiekiem. (grindować - ciężko pracować; sigma - osoba pewna siebie, niezależna)"
         """
-        title = "Slang -> Formalny (Senior)"
-        style = "bold cyan"
-    console.print("Loading model...")
     model, tokenizer = load_model()
     
-    console.print("Generating")
     result = generate_response(model, tokenizer, system_prompt, user_text)
     
-    console.print(f"\n[dim]Original: {user_text}[/dim]")
-    console.print(Panel(result, title=title,
-                  style=style, border_style="white"))
+    console.print(result)
 
 if __name__ == "__main__":
     app()
