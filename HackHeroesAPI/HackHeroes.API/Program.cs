@@ -14,7 +14,7 @@ abstract class HackHeroesAPI
 
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
-		
+
 		App = builder.Build();
 		_translationService = new DevTranslationService();
 
@@ -26,7 +26,15 @@ abstract class HackHeroesAPI
 
 		App.UseHttpsRedirection();
 
-		App.MapGet("/status", () => new Status())
+		App.MapGet("/status", async (HttpContext ctx) =>
+			{
+				bool isValidApiKey = false;
+				string? token = ctx.Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
+				if (token != null && token.Equals(rootApiToken))
+					isValidApiKey = true;
+				
+				return new Status(isValidApiKey);
+			})
 			.WithName("GetStatus")
 			.WithDescription("Returns server status")
 			.WithOpenApi();
@@ -36,7 +44,7 @@ abstract class HackHeroesAPI
 				string? token = ctx.Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
 				if (token is not { } token2 || !token2.Equals(rootApiToken))
 					return Results.Unauthorized();
-				
+
 				if (translationRequest is null)
 					return Results.BadRequest();
 
@@ -44,7 +52,7 @@ abstract class HackHeroesAPI
 
 				if (translatedMessage is null)
 					return Results.StatusCode(500);
-				
+
 				return Results.Ok(new TranslationResponse(translatedMessage));
 			})
 			.WithName("PostTranslate")
