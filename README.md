@@ -24,3 +24,25 @@ The API will be available at `http://localhost:7026`. You will also have to trus
 dotnet dev-certs https --trust
 ```
 The API will generate `root.txt` in HackHeroes.API folder, which contains the Bearer token for accessing the service.
+
+### Python
+
+To run the python script do this: (for linux)
+
+```shell
+python -m venv venv
+source venv/bin/activate 
+```
+Then install the dependencies
+```shell
+pip install requirements.txt -r
+```
+Sample command to the cli looks like this:
+```shell
+python main.py translate "Text" -d [OPTION]
+```
+
+## Options
+
+slang - It translates from formal speech to slang <br>
+senior/no flag as it is default one - translates from slang to formal speech
