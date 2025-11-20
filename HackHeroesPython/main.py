@@ -4,18 +4,24 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from rich.console import Console
 from rich.panel import Panel
 import warnings
+import logging
+import torch
+import transformers
 
 model_name = "Qwen/Qwen2.5-3B-Instruct"
 warnings.filterwarnings("ignore")
+logging.getLogger("transformers").setLevel(logging.ERROR)
+transformers.logging.set_verbosity_error()
 
 app = typer.Typer(help="CLI AI Translator")
 console = Console()
 
 def load_model():
+
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
-        dtype="auto",
-        device_map="auto"
+        device_map="auto",
+        dtype="auto"
     )
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     return model, tokenizer
@@ -34,7 +40,7 @@ def generate_response(model, tokenizer, system_prompt, user_text):
         model_inputs.input_ids,
         max_new_tokens=256,
         do_sample=True,
-        temperature=0.4,
+        temperature=0.7,
         top_p=0.9
     )
 
@@ -50,29 +56,36 @@ def translate(text: List[str] = typer.Argument(..., help="Text for translation")
               ):
     user_text = " ".join(text)
     if direction == "slang":
-        system_prompt = """Jesteś nastolatkiem z Generacji Z. Przetłumacz podany sztywny tekst na luźny slang.
+        system_prompt = """Jesteś młodą osobą z Generacji Z, która używa naturalnego, nowoczesnego slangu. 
+            Twoim zadaniem jest przetłumaczenie sztywnego, oficjalnego tekstu na luźny język potoczny, używany przez młodych ludzi w internecie i na co dzień.
+            Nie używaj przestarzałych zwrotów (jak "klawo", "czad"). Używaj słów takich jak: rel, cringe, baza, slay, odklejka, dymy,essa, mrozi, sigma.
+            Zachowaj sens wypowiedzi, ale zmień formę na maksymalnie luźną.
+
             Przykłady:
-            Tekst: "To jest bardzo zabawne." -> Slang: "Totalna beka z tego."
-            Tekst: "Czuję się zażenowany." -> Slang: "Ale cringe."
-            Tekst: "Zgadzam się z toba." -> Slang: "Rel totalnie."
-        """        
-        title = "Formalny -> Slang"
+            Tekst: "To jest bardzo zabawne." -> Slang: "Totalna beka, nie wytrzymam."
+            Tekst: "Czuję się zażenowany tą sytuacją." -> Slang: "Jaki cringe, mrozi mnie totalnie."
+            Tekst: "Zgadzam się z tobą w stu procentach." -> Slang: "Rel, baza totalna."
+            Tekst: "On zachowuje się dziwnie." -> Slang: "Ale odklejka, typ ma swój świat."
+            Tekst: "Wyglądasz świetnie." -> Slang: "Slay, wyglądasz jak sigma."
+        """
+        title = "Formalny -> Slang (Gen Z)"
         style = "bold magenta"
     else:
-        system_prompt = """Jesteś ekspertem językowym. Twoim zadaniem jest przetłumaczenie slangu młodzieżowego na poprawną polszczyznę zrozumiałym dla seniora.
-            W nawiasie dodaj krótkie wyjaśnienie kluczowego słowa.
+        system_prompt = """Jesteś ekspertem językowym i tłumaczem międzypokoleniowym. 
+            Twoim zadaniem jest przetłumaczenie młodzieżowego slangu na poprawną, kulturalną polszczyznę, zrozumiałą dla osoby starszej (seniora).
+            Kluczowe jest, abyś nie tylko przetłumaczył zdanie, ale w nawiasie wyjaśnił znaczenie trudnych słów slangowych w prosty sposób.
 
             Przykłady:
-            Slang: "Ta impreza to był totalny sztos." 
-            Tłumaczenie: "To przyjęcie było rewelacyjne (sztos oznacza coś świetnego, wyjątkowego)."
+            Slang: "Ta impreza to był totalny sztos, ale potem były dymy."
+            Tłumaczenie: "To przyjęcie było rewelacyjne, ale później wybuchła awantura. (sztos - coś świetnego; dymy - kłótnia, zamieszanie)"
 
-            Slang: "Ten film jest cringe."
-            Tłumaczenie: "Ten film wywołuje uczucie zażenowania (cringe to wstyd za kogoś/coś, lub zażenowanie)."
+            Slang: "Ten film to cringe, totalna odklejka."
+            Tłumaczenie: "Ten film wywołuje uczucie zażenowania i jest zupełnie bez sensu. (cringe - wstyd, zażenowanie; odklejka - oderwanie od rzeczywistości)"
 
-            Slang: "Idę na trening, muszę grindować."
-            Tłumaczenie: "Idę na trening, muszę ciężko pracować (grindować to żmudnie dążyć do celu)."
+            Slang: "Idę na trening, muszę grindować żeby być sigmą."
+            Tłumaczenie: "Idę na trening, muszę ciężko pracować, żeby stać się niezależnym i silnym człowiekiem. (grindować - ciężko pracować; sigma - osoba pewna siebie, niezależna)"
         """
-        title = "Slang -> Formalny"
+        title = "Slang -> Formalny (Senior)"
         style = "bold cyan"
     console.print("Loading model...")
     model, tokenizer = load_model()
