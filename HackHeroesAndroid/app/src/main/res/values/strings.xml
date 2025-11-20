@@ -3,4 +3,10 @@
     <string name="translator_input_placeholder">Enter text</string>
     <string name="translator_clear_button">Clear</string>
     <string name="translator_translate_button">Translate</string>
+    <string name="settings_title">Settings</string>
+    <string name="save_button">Save</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="settings_api_url">API URL</string>
+    <string name="settings_api_key">API Key</string>
+    <string name="settings_error_invalid_url">Invalid URL</string>
 </resources>

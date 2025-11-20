@@ -20,6 +20,8 @@ class TranslationViewModel : ViewModel() {
     private val _output = MutableStateFlow<LoadingState<String>?>(null)
     val output = _output.asStateFlow()
 
+    var areSettingsVisible by mutableStateOf(false)
+
     fun translate() = viewModelScope.launch {
         _output.update { LoadingState.Loading }
         try {

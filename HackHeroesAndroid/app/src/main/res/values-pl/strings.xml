@@ -4,4 +4,10 @@
     <string name="translator_input_placeholder">Wpisz tekst</string>
     <string name="translator_clear_button">Wyczyść</string>
     <string name="translator_translate_button">Przetłumacz</string>
+    <string name="settings_title">Ustawienia</string>
+    <string name="save_button">Zapisz</string>
+    <string name="cancel_button">Anuluj</string>
+    <string name="settings_api_url">URL API</string>
+    <string name="settings_api_key">Klucz API</string>
+    <string name="settings_error_invalid_url">Nieprawidłowy URL</string>
 </resources>

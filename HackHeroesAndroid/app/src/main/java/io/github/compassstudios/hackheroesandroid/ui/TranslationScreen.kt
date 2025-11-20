@@ -13,6 +13,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -29,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.compassstudios.hackheroesandroid.R
 import io.github.compassstudios.hackheroesandroid.helpers.LoadingState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,12 +42,28 @@ fun TranslationScreen(
 ) {
     val output by viewModel.output.collectAsState()
 
+    if (viewModel.areSettingsVisible) {
+        SettingsDialog(
+            onDismissRequest = { viewModel.areSettingsVisible = false },
+        )
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(stringResource(R.string.app_name))
-                }
+                },
+                actions = {
+                    IconButton(
+                        onClick = { viewModel.areSettingsVisible = true },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = stringResource(R.string.settings_title),
+                        )
+                    }
+                },
             )
         },
         modifier = modifier

@@ -5,12 +5,15 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Header
 import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.Url
 import io.github.compassstudios.hackheroesandroid.api.models.StatusDto
 import io.github.compassstudios.hackheroesandroid.api.models.TranslationDto
 
 interface TranslationApi {
-    @GET("status")
-    suspend fun status(): StatusDto
+    @GET
+    suspend fun status(
+        @Url url: String,
+    ): StatusDto
 
     @POST("translate")
     @Headers("Content-Type: application/json")
