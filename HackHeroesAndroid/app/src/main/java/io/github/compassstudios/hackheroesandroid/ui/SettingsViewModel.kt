@@ -26,6 +26,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     val serverStatus = _serverStatus.asStateFlow()
 
     class InvalidUrlError : Error()
+    class InvalidKeyError : Error()
 
     init {
         restoreState()
@@ -48,7 +49,15 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         apiUrl = apiUrl.trimEnd('/')
         _serverStatus.update { LoadingState.Loading }
         try {
-            ApiClient.translationApi.status(apiUrl)
+            val status = ApiClient.translationApi.status(
+                basePath = apiUrl,
+                authorization = "Bearer $apiKey",
+            )
+            if (!status.isValidApiKey) {
+                _serverStatus.update { LoadingState.Error(InvalidKeyError()) }
+                return@launch
+            }
+
             application.credentialsDataStore.updateData {
                 Credentials(apiUrl, apiKey)
             }

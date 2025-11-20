@@ -6,4 +6,5 @@ import kotlinx.serialization.Serializable
 data class StatusDto(
     val environmentName: String,
     val applicationName: String,
+    val isValidApiKey: Boolean,
 )

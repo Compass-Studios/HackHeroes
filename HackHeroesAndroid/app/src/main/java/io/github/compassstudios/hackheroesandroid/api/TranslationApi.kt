@@ -13,6 +13,7 @@ interface TranslationApi {
     @GET("{basePath}/status")
     suspend fun status(
         @Path basePath: String,
+        @Header("Authorization") authorization: String,
     ): StatusDto
 
     @POST("{basePath}/translate")

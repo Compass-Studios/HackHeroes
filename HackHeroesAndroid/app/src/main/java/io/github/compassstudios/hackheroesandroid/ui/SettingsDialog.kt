@@ -87,13 +87,27 @@ fun SettingsDialog(
                 OutlinedTextField(
                     value = viewModel.apiKey,
                     onValueChange = { viewModel.apiKey = it },
+                    supportingText = {
+                        serverStatus?.let {
+                            if (it is LoadingState.Error<*> && it.error is SettingsViewModel.InvalidKeyError) {
+                                Text(
+                                    text = stringResource(R.string.settings_error_invalid_key),
+                                    color = MaterialTheme.colorScheme.error,
+                                )
+                            }
+                        }
+                    },
                     label = {
                         Text(stringResource(R.string.settings_api_key))
                     }
                 )
 
                 serverStatus?.let {
-                    if (it is LoadingState.Error<*> && it.error !is SettingsViewModel.InvalidUrlError) {
+                    if (
+                        it is LoadingState.Error<*>
+                        && it.error !is SettingsViewModel.InvalidUrlError
+                        && it.error !is SettingsViewModel.InvalidKeyError
+                    ) {
                         Text(
                             text = it.error.localizedMessage ?: it.error.toString(),
                             color = MaterialTheme.colorScheme.error,
