@@ -5,9 +5,11 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <TargetFramework>net9.0</TargetFramework>
         <LangVersion>latest</LangVersion>
+    <UserSecretsId>0bae12a1-3877-4ed0-a9fb-9770daa3d85c</UserSecretsId>
   </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Google.GenAI" Version="0.6.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.21" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     </ItemGroup>

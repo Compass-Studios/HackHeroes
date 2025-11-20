@@ -16,7 +16,7 @@ abstract class HackHeroesAPI
 		builder.Services.AddSwaggerGen();
 
 		App = builder.Build();
-		_translationService = new DevTranslationService();
+		_translationService = new GeminiTranslationService(builder.Configuration["ApiKeys:Gemini"]);
 
 		if (App.Environment.IsDevelopment())
 		{
