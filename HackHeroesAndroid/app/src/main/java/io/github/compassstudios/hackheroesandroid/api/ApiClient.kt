@@ -16,8 +16,6 @@ object ApiClient {
                 })
             }
         }
-        // TODO: Unhardcode
-        .baseUrl("http://10.0.2.2:5014/")
         .build()
 
     val translationApi = ktorfit.createTranslationApi()

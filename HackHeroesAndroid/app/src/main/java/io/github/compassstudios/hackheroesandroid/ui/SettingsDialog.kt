@@ -10,6 +10,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -29,6 +30,10 @@ fun SettingsDialog(
 ) {
     val serverStatus by viewModel.serverStatus.collectAsState()
     if (serverStatus is LoadingState.Success) onDismissRequest()
+
+    LaunchedEffect(null) {
+        viewModel.restoreState()
+    }
 
     AlertDialog(
         title = {
