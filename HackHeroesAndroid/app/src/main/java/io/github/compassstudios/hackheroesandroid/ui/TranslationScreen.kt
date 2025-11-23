@@ -1,11 +1,18 @@
 package io.github.compassstudios.hackheroesandroid.ui
 
+import android.app.Activity
+import android.content.Intent
+import android.speech.RecognizerIntent
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,6 +21,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.CompareArrows
+import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -142,6 +150,30 @@ private fun InputInterface(
     onTranslate: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val speechRecognitionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = { activityResult ->
+            if (activityResult.resultCode != Activity.RESULT_OK) {
+                Log.w("TranslationScreen", "Speech Recognition failed")
+                return@rememberLauncherForActivityResult
+            }
+
+            onValueChange(
+                activityResult.data!!
+                    .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                !![0]
+            )
+        },
+    )
+
+    val launchSpeechRecognition = {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, "pl-PL")
+        }
+        speechRecognitionLauncher.launch(intent)
+    }
+
     Column(modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -179,6 +211,20 @@ private fun InputInterface(
             onValueChange = onValueChange,
             placeholder = {
                 Text(stringResource(R.string.translator_input_placeholder))
+            },
+            trailingIcon = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(5.dp)
+                ) {
+                    IconButton(onClick = launchSpeechRecognition) {
+                        Icon(
+                            imageVector = Icons.Default.Mic,
+                            contentDescription = stringResource(R.string.translator_speech_recogniton_button)
+                        )
+                    }
+                }
             },
             modifier = Modifier
                 .height(140.dp)

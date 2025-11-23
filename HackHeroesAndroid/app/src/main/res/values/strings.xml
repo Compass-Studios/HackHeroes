@@ -13,4 +13,5 @@
     <string name="language_normal">Normal</string>
     <string name="language_brainrot">Brainrot</string>
     <string name="translator_switch_direction_button">Switch direction</string>
+    <string name="translator_speech_recogniton_button">Activate speech recognition</string>
 </resources>
