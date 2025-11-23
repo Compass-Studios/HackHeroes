@@ -1,6 +1,7 @@
 package io.github.compassstudios.hackheroesandroid.api
 
 import de.jensklingenberg.ktorfit.Ktorfit
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
@@ -14,6 +15,11 @@ object ApiClient {
                 json(Json {
                     ignoreUnknownKeys = true
                 })
+            }
+
+            install(HttpTimeout) {
+                socketTimeoutMillis = 60_000
+                requestTimeoutMillis = 30_000
             }
         }
         .build()
