@@ -1,6 +1,9 @@
 ﻿# HackHeroes
 Project for HackHeroes 2025. The project is a translation app, that helps people from different generations to communicate with each other more easily. The app uses AI to translate slang and idioms from one generation to another.
 
+> [!IMPORTANT]
+> The mobile app requires API server to function. You can request access to the server [here](mailto:maciejowski2006yt@gmail.com?subject=Dost%C4%99p%20do%20serwera%20API).
+
 ## Development
 ### Prerequisites
 - .NET SDK 9.0
