@@ -45,7 +45,26 @@ Sample command to the cli looks like this:
 python main.py translate "Text" -d [OPTION]
 ```
 
-## Options
+### Options
 
 slang - It translates from formal speech to slang <br>
 senior/no flag as it is default one - translates from slang to formal speech
+
+## Deployment
+If you want to set up your own API server, download the API server from the releases tab. You will need [ASP.NET Core Runtime 9](https://dotnet.microsoft.com/en-us/download/dotnet/9.0). You need to modify the `appsettings.json` and add the following configuration:
+```jsonc
+{
+  // ...
+  "ApiKeys": {
+    "Gemini": "YOUR_GEMINI_API_KEY" // Get it here: https://aistudio.google.com/api-keys
+  },
+  "Kestrel": {
+    "Endpoints": {
+      "Http": {
+        "Url": "http://0.0.0.0:5000" // Optional, if you want the server to listen on all interfaces
+      }
+    }
+  }
+}
+```
+After running the server, a new file named `root.txt` will be created in the current working directory, which contains the API key required to authenticate the mobile app.
